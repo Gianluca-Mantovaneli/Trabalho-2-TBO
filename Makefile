@@ -1,27 +1,21 @@
 # Nome do arquivo de saída
-TARGET = programa
+TARGET = trab2
 
 # Compilador
 CC = gcc
 
-# Flags de compilação
-CFLAGS = -Wall -Wextra -Wpedantic
-
-# Diretórios das bibliotecas
-LIB_DIRS = -L/path/to/library1 -L/path/to/library2
-
-# Bibliotecas extras
-LIBS = -llibrary1 -llibrary2 -lm
+# Opções de compilação
+CFLAGS = -Wall -Wpedantic
 
 # Arquivos fonte
-SOURCES = main.c arquivo1.c arquivo2.c
+SOURCES = main.c
 
 # Objetos gerados
 OBJECTS = $(SOURCES:.c=.o)
 
 # Regra de compilação
 $(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) $(LIB_DIRS) -o $(TARGET) $(OBJECTS) $(LIBS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS)
 
 # Regra de compilação dos objetos
 %.o: %.c
@@ -30,3 +24,6 @@ $(TARGET): $(OBJECTS)
 # Regra de limpeza
 clean:
 	rm -f $(OBJECTS) $(TARGET)
+
+run:
+	./$(TARGET)
