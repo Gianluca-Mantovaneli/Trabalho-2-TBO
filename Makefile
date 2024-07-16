@@ -1,5 +1,5 @@
 # Nome do arquivo de saída
-TARGET = trab2
+TARGET = Bin/trab2
 
 # Compilador
 CC = gcc
@@ -7,18 +7,23 @@ CC = gcc
 # Opções de compilação
 CFLAGS = -Wall -Wpedantic
 
+# Diretórios
+SRCDIR = Sources
+OBJDIR = Objects
+BINDIR = Bin
+
 # Arquivos fonte
-SOURCES = main.c
+SOURCES = $(wildcard $(SRCDIR)/*.c)
 
 # Objetos gerados
-OBJECTS = $(SOURCES:.c=.o)
+OBJECTS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SOURCES))
 
 # Regra de compilação
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS)
 
 # Regra de compilação dos objetos
-%.o: %.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Regra de limpeza
