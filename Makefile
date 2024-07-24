@@ -35,8 +35,11 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 # Regra de limpeza
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f $(OBJECTS) $(TARGET) $(TARGET)_debug
 
+# Regra para gerar o arquivo de debug
+debug:
+		$(CC) $(CFLAGS) -g $(SOURCES) -o $(TARGET)_debug
 # Regra para executar o programa
 run1:
 	./$(TARGET) $(ARGS1)
