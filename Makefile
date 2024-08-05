@@ -19,10 +19,10 @@ SOURCES = $(wildcard $(SRCDIR)/*.c)
 OBJECTS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SOURCES))
 
 # Argumentos
-ARGS1 =  Especificações_e_Exemplos/entradas/N10_S3_C3_M3.txt saida1.txt
-ARGS2 =  Especificações_e_Exemplos/entradas/N100_S20_C30_M5.txt saida2.txt
-ARGS3 =  Especificações_e_Exemplos/entradas/N1000_S50_C300_M10.txt saida3.txt
-ARGS4 =  Especificações_e_Exemplos/entradas/N10000_S50_C300_M10.txt saida4.txt
+ARGS1 =  Exemplos/entradas/N10_S3_C3_M3.txt saida1.txt
+ARGS2 =  Exemplos/entradas/N100_S20_C30_M5.txt saida2.txt
+ARGS3 =  Exemplos/entradas/N1000_S50_C300_M10.txt saida3.txt
+ARGS4 =  Exemplos/entradas/N10000_S50_C300_M10.txt saida4.txt
 
 # Regra de compilação
 $(TARGET): $(OBJECTS)
