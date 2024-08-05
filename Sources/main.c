@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "inAndOut.h"
+#include "grafoListaDeAdjacencia.h"
+
 int main(int argc, char const *argv[])
 {
     // Leitura do arquivo de entrada

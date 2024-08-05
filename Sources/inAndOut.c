@@ -1,4 +1,5 @@
 #include "inAndOut.h"
+#include "grafoListaDeAdjacencia.h"
 
 void LeituraArquivo(const char *entradaPath)
 {
@@ -27,6 +28,8 @@ void LeituraArquivo(const char *entradaPath)
         contadorDeLinhas++;
     }
 
+    Grafo grafo = iniciaGrafo(V, E); // Inicializando a estrutura do grafo
+
     // Lendo a segunda linha para obter S, C e M
     if (fgets(line, sizeof(line), file) != NULL)
     {
@@ -40,10 +43,7 @@ void LeituraArquivo(const char *entradaPath)
     }
 
     // Declarando arrays para S, C e M após conhecer seus tamanhos
-    // TODO: Armazenar isso em uma outra biblioteca grafoListaAdjacencias.h Alem do valores de S, C e M e dos arrays, armazenar também o grafo
-    int arraryS[S];
-    int arraryC[C];
-    int arraryM[M];
+    Filter filter = iniciaFilter(S, C, M);
 
     // Lendo as linhas seguintes para preencher os arrays S, C e M
     while (fgets(line, sizeof(line), file) != NULL)
@@ -51,32 +51,20 @@ void LeituraArquivo(const char *entradaPath)
         contadorDeLinhas++;
         if (contadorDeLinhas < (S + 3) && contadorDeLinhas >= 3)
         {
-            arraryS[contadorDeLinhas - 3] = atoi(line);
+            insereInFilter(atoi(line), filter, 0);
         }
         else if (contadorDeLinhas < (S + C + 3) && contadorDeLinhas >= S + 3)
         {
-            arraryC[contadorDeLinhas - 3 - S] = atoi(line);
+            insereInFilter(atoi(line), filter, 1);
         }
         else if (contadorDeLinhas < (S + C + M + 3) && contadorDeLinhas >= S + C + 3)
         {
-            arraryM[contadorDeLinhas - 3 - S - C] = atoi(line);
+            insereInFilter(atoi(line), filter, 2);
         }
     }
 
     // Exibindo os valores lidos
-    printf("V = %d\nE = %d\n", V, E);
-    for (int i = 0; i < S; i++)
-    {
-        printf("S[%d] = %d\n", i, arraryS[i]);
-    }
-    for (int i = 0; i < C; i++)
-    {
-        printf("C[%d] = %d\n", i, arraryC[i]);
-    }
-    for (int i = 0; i < M; i++)
-    {
-        printf("M[%d] = %d\n", i, arraryM[i]);
-    }
+    imprimeFilter(filter);
 
     fclose(file);
 }
