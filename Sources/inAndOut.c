@@ -61,6 +61,22 @@ void LeituraArquivo(const char *entradaPath)
         {
             filter = insereInFilter(atoi(line), filter, 2);
         }
+        if (contadorDeLinhas == (S + C + M + 2)) // Identifica a última linha de servidores, clientes e monitores
+            break;
+    }
+
+    // Lendo as linhas seguintes para preencher o grafo
+    int idEmissor, idReceptor;
+    double peso;
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        token = strtok(line, " ");
+        idEmissor = atoi(token);
+        token = strtok(NULL, " ");
+        idReceptor = atoi(token);
+        token = strtok(NULL, " ");
+        peso = atof(token);
+        insereArestaDirecionada(grafo, idEmissor, idReceptor, peso);
     }
 
     // Exibindo os valores lidos
