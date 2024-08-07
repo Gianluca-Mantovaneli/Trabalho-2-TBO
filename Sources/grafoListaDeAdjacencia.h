@@ -1,6 +1,9 @@
 #if !defined(grafoListaDeAdjacencia_H)
 #define grafoListaDeAdjacencia_H
 
+#include <stdio.h>
+#include <stdlib.h>
+
 typedef struct node
 {
     int id;            // ID do vértice receptor

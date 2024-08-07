@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "grafoListaDeAdjacencia.h"
 
 Grafo iniciaGrafo(int V, int E)
@@ -122,4 +120,12 @@ void destroiGrafo(Grafo grafo)
     }
     free(grafo->listaDeAdjacencia);
     free(grafo);
+}
+
+void destroiFilter(Filter filter)
+{
+    free(filter->arraryS);
+    free(filter->arraryC);
+    free(filter->arraryM);
+    free(filter);
 }

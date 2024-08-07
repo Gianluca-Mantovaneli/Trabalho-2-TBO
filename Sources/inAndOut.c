@@ -68,5 +68,6 @@ void LeituraArquivo(const char *entradaPath)
 
     // Destruindo as estruturas alocadas
     destroiGrafo(grafo);
+    destroiFilter(filter);
     fclose(file);
 }

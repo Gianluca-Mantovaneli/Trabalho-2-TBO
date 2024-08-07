@@ -49,3 +49,12 @@ run3:
 	./$(TARGET) $(ARGS3)
 run4:
 	./$(TARGET) $(ARGS4)
+
+run1_valgrind:
+	valgrind --leak-check=full ./$(TARGET) $(ARGS1)
+run2_valgrind:
+	valgrind --leak-check=full ./$(TARGET) $(ARGS2)
+run3_valgrind:
+	valgrind --leak-check=full ./$(TARGET) $(ARGS3)
+run4_valgrind:
+	valgrind --leak-check=full ./$(TARGET) $(ARGS4)
