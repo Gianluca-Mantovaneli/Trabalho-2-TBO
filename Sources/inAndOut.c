@@ -65,6 +65,8 @@ void LeituraArquivo(const char *entradaPath)
 
     // Exibindo os valores lidos
     imprimeFilter(filter);
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
+    imprimeGrafo(grafo);
 
     // Destruindo as estruturas alocadas
     destroiGrafo(grafo);

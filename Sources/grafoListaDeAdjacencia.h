@@ -38,6 +38,8 @@ void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double 
 
 void imprimeFilter(Filter filter);
 
+void imprimeGrafo(Grafo grafo);
+
 void destroiGrafo(Grafo grafo);
 
 void destroiFilter(Filter filter);
