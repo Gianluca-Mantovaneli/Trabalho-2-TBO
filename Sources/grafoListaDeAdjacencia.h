@@ -3,9 +3,9 @@
 
 typedef struct node
 {
-    int idReceptor;       // ID do vértice receptor
-    double peso;          // Peso da aresta
-    struct node *proximo; // Próximo nó caso exista
+    int id;            // ID do vértice receptor
+    double peso;       // Peso da aresta
+    struct node *prox; // Próximo nó caso exista
 } Node;
 
 typedef struct grafo
@@ -29,9 +29,9 @@ Grafo iniciaGrafo(int V, int E);
 
 Filter iniciaFilter(int S, int C, int M);
 
-void insereInFilter(int numero, Filter filter, int tipo);
+Filter insereInFilter(int numero, Filter filter, int tipo);
 
-void insereArestaNaoDirecionada(Grafo grafo, int idEmissor, int idReceptor, double peso);
+void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double peso);
 
 void imprimeFilter(Filter filter);
 

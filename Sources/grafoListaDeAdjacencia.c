@@ -40,10 +40,18 @@ Filter iniciaFilter(int S, int C, int M)
     return filter;
 }
 
-void insereInFilter(int numero, Filter filter, int tipo)
+Filter insereInFilter(int numero, Filter filter, int tipo)
 {
     if (tipo == 0) // == servidor
     {
+        for (int i = 0; i < filter->S; i++)
+        {
+            if (filter->arraryS[i] == -1)
+            {
+                filter->arraryS[i] = numero;
+                break;
+            }
+        }
     }
     else if (tipo == 1) // == cliente
     {
@@ -52,6 +60,7 @@ void insereInFilter(int numero, Filter filter, int tipo)
             if (filter->arraryC[i] == -1)
             {
                 filter->arraryC[i] = numero;
+                break;
             }
         }
     }
@@ -62,9 +71,21 @@ void insereInFilter(int numero, Filter filter, int tipo)
             if (filter->arraryM[i] == -1)
             {
                 filter->arraryM[i] = numero;
+                break;
             }
         }
     }
+    return filter;
+}
+
+void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double peso)
+{
+    // Insere uma aresta direcionada de idEmissor para idReceptor com peso (Porem não estou verificando se já existe a aresta afim de economizar tempo de execução)
+    Node *novoNode = (Node *)malloc(sizeof(Node));
+    novoNode->id = idReceptor;
+    novoNode->peso = peso;
+    novoNode->prox = grafo->listaDeAdjacencia[idEmissor];
+    grafo->listaDeAdjacencia[idEmissor] = novoNode;
 }
 
 void imprimeFilter(Filter filter)
@@ -85,4 +106,20 @@ void imprimeFilter(Filter filter)
         printf("%d ", filter->arraryM[i]);
     }
     printf("\n");
+}
+
+void destroiGrafo(Grafo grafo)
+{
+    for (int i = 0; i < grafo->V; i++)
+    {
+        Node *atual = grafo->listaDeAdjacencia[i];
+        while (atual != NULL)
+        {
+            Node *temp = atual;
+            atual = atual->prox;
+            free(temp);
+        }
+    }
+    free(grafo->listaDeAdjacencia);
+    free(grafo);
 }

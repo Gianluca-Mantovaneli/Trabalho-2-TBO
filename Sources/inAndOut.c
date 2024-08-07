@@ -51,20 +51,22 @@ void LeituraArquivo(const char *entradaPath)
         contadorDeLinhas++;
         if (contadorDeLinhas < (S + 3) && contadorDeLinhas >= 3)
         {
-            insereInFilter(atoi(line), filter, 0);
+            filter = insereInFilter(atoi(line), filter, 0);
         }
         else if (contadorDeLinhas < (S + C + 3) && contadorDeLinhas >= S + 3)
         {
-            insereInFilter(atoi(line), filter, 1);
+            filter = insereInFilter(atoi(line), filter, 1);
         }
         else if (contadorDeLinhas < (S + C + M + 3) && contadorDeLinhas >= S + C + 3)
         {
-            insereInFilter(atoi(line), filter, 2);
+            filter = insereInFilter(atoi(line), filter, 2);
         }
     }
 
     // Exibindo os valores lidos
     imprimeFilter(filter);
 
+    // Destruindo as estruturas alocadas
+    destroiGrafo(grafo);
     fclose(file);
 }
