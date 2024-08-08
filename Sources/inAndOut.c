@@ -86,7 +86,7 @@ void LeituraArquivo(const char *entradaPath)
     // imprimeGrafo(grafo);
 
     // Executando o algoritmo de Dijkstra
-    printf("Distância de 0 a 2: %lf\n", dijkstra(grafo, 0, 2));
+    dijkstra(grafo, 0);
 
     // Destruindo as estruturas alocadas
     destroiGrafo(grafo);

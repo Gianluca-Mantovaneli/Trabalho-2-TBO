@@ -2,6 +2,7 @@
     "C_Cpp.errorSquiggles": "disabled",
     "files.associations": {
         "*.c": "c",
-        "grafolistadeadjacencia.h": "c"
+        "grafolistadeadjacencia.h": "c",
+        "item.h": "c"
     }
 }

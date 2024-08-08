@@ -3,7 +3,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <stdbool.h>
 #include "grafoListaDeAdjacencia.h"
+#include "priorityQueue.h"
 
-double dijkstra(Grafo grafo, int idEmissor, int idReceptor);
+void dijkstra(Grafo grafo, int inicio);
+
 #endif // dijkstra_H
