@@ -1,91 +1,96 @@
 #include "priorityQueue.h"
 
-static Item *pq;
-static int *map;
-static int N;
-
-static void swap(int i, int j)
+static void swap(PriorityQueue *pq, int i, int j)
 {
-    exch(pq[i], pq[j]);
-    map[id(pq[i])] = i;
-    map[id(pq[j])] = j;
+    exch(pq->pq[i], pq->pq[j]);
+    pq->map[id(pq->pq[i])] = i;
+    pq->map[id(pq->pq[j])] = j;
 }
 
-void fix_up(Item *a, int k)
+void fix_up(PriorityQueue *pq, int k)
 {
-    while (k > 1 && more(a[k / 2], a[k]))
+    while (k > 1 && more(pq->pq[k / 2], pq->pq[k]))
     {
-        swap(k, k / 2);
+        swap(pq, k, k / 2);
         k = k / 2;
     }
 }
 
-void fix_down(Item *a, int sz, int k)
+void fix_down(PriorityQueue *pq, int k)
 {
-    while (2 * k <= sz)
+    while (2 * k <= pq->N)
     {
         int j = 2 * k;
-        if (j < sz && more(a[j], a[j + 1]))
+        if (j < pq->N && more(pq->pq[j], pq->pq[j + 1]))
         {
             j++;
         }
-        if (!more(a[k], a[j]))
+        if (!more(pq->pq[k], pq->pq[j]))
         {
             break;
         }
-        swap(k, j);
+        swap(pq, k, j);
         k = j;
     }
 }
 
-void PQ_init(int maxN)
+void PQ_init(PriorityQueue *pq, int maxN)
 {
-    pq = (Item *)malloc((maxN + 1) * sizeof(Item));
-    map = (int *)malloc((maxN + 1) * sizeof(int));
-    N = 0;
+    pq->pq = (Item *)malloc((maxN + 1) * sizeof(Item));
+    pq->map = (int *)malloc((maxN + 1) * sizeof(int));
+    pq->N = 0;
 }
 
-void PQ_insert(Item v)
+void PQ_insert(PriorityQueue *pq, Item v)
 {
-    N++;
-    pq[N] = v;
-    map[id(v)] = N;
-    fix_up(pq, N);
+    pq->N++;
+    pq->pq[pq->N] = v;
+    pq->map[id(v)] = pq->N;
+    fix_up(pq, pq->N);
 }
 
-Item PQ_delmin()
+Item PQ_delmin(PriorityQueue *pq)
 {
-    Item min = pq[1];
-    swap(1, N);
-    N--;
-    fix_down(pq, N, 1);
+    Item min = pq->pq[1];
+    swap(pq, 1, pq->N);
+    pq->N--;
+    fix_down(pq, 1);
     return min;
 }
 
-Item PQ_min()
+Item PQ_min(PriorityQueue *pq)
 {
-    return pq[1];
+    return pq->pq[1];
 }
 
-void PQ_decrease_key(int id, double value)
+void PQ_print(PriorityQueue *pq)
 {
-    int i = map[id];
-    value(pq[i]) = value;
+    for (int i = 1; i <= pq->N; i++)
+    {
+        printf("%f ", pq->pq[i]);
+    }
+    printf("\n");
+}
+
+void PQ_decrease_key(PriorityQueue *pq, int id, double value)
+{
+    int i = pq->map[id];
+    value(pq->pq[i]) = value;
     fix_up(pq, i);
 }
 
-bool PQ_empty()
+bool PQ_empty(PriorityQueue *pq)
 {
-    return N == 0;
+    return pq->N == 0;
 }
 
-int PQ_size()
+int PQ_size(PriorityQueue *pq)
 {
-    return N;
+    return pq->N;
 }
 
-void PQ_finish()
+void PQ_finish(PriorityQueue *pq)
 {
-    free(pq);
-    free(map);
+    free(pq->pq);
+    free(pq->map);
 }

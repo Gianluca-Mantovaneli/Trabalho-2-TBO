@@ -1,13 +1,21 @@
-#include "dijkstra.h"
+#include "priorityQueue.h"
+#include "grafoListaDeAdjacencia.h"
+#include <limits.h>
+#include <stdbool.h>
 
 void dijkstra(Grafo grafo, int inicio)
 {
-    int V = grafo->V; // Número de vértices
-    double dist[V];   // Array de distâncias
-    bool visitado[V]; // Array de visitados
-    int prev[V];      // Array de predecessores
+    int V = grafo->V;
 
-    // Inicializa os arrays das distâncias, predecessores e visitados
+    // Alocação dinâmica de memória para as variáveis locais
+    double *dist = (double *)malloc(V * sizeof(double));
+    int *prev = (int *)malloc(V * sizeof(int));
+    bool *visitado = (bool *)malloc(V * sizeof(bool));
+
+    PriorityQueue pq;
+    PQ_init(&pq, V);
+
+    // Inicializando as distâncias, predecessores e visitados
     for (int i = 0; i < V; i++)
     {
         dist[i] = INT_MAX;
@@ -15,13 +23,12 @@ void dijkstra(Grafo grafo, int inicio)
         visitado[i] = false;
     }
 
-    dist[inicio] = 0.0;                            // A distância do vértice de início para ele mesmo é 0
-    PQ_init(V);                                    // Inicializa a fila de prioridade
-    PQ_insert((Item){.id = inicio, .value = 0.0}); // Insere o vértice de início na fila de prioridade
+    dist[inicio] = 0.0;
+    PQ_insert(&pq, (Item){.id = inicio, .value = 0.0});
 
-    while (!PQ_empty())
+    while (!PQ_empty(&pq))
     {
-        Item u = PQ_delmin();
+        Item u = PQ_delmin(&pq);
         int u_id = u.id;
 
         if (visitado[u_id])
@@ -38,17 +45,23 @@ void dijkstra(Grafo grafo, int inicio)
             {
                 dist[v] = dist[u_id] + peso;
                 prev[v] = u_id;
-                PQ_insert((Item){.id = v, .value = dist[v]});
+                PQ_insert(&pq, (Item){.id = v, .value = dist[v]});
             }
 
             vizinho = vizinho->prox;
         }
     }
 
-    PQ_finish();
+    PQ_finish(&pq);
+
     // Output das distâncias mínimas
     for (int i = 0; i < V; i++)
     {
         printf("Distância do nó %d ao nó %d: %f\n", inicio, i, dist[i]);
     }
+
+    // Liberação da memória alocada
+    free(dist);
+    free(prev);
+    free(visitado);
 }

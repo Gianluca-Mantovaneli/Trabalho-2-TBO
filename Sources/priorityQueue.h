@@ -6,13 +6,22 @@
 #include <stdbool.h>
 #include "item.h"
 
-void PQ_init(int maxN);                     // cria uma min PQ com capacidade maxN
-void PQ_insert(Item);                       // Insere Item na PQ. A maior prioridade é a do Item com menor campo 'value'
-Item PQ_delmin();                           // Remove Item com menor campo 'value' da PQ
-void PQ_decrease_key(int id, double value); // Muda a prioridade do nó com identificador 'id' para 'value'
-Item PQ_min();                              // Retorna Item com menor campo 'value' da PQ
-bool PQ_empty();                            // Retorna True se a PQ não tem elementos
-int PQ_size();                              // Número de elementos na PQ
-void PQ_finish();                           // Libera memória
+// Estrutura para representar a Priority Queue
+typedef struct
+{
+    Item *pq; // Array de itens
+    int *map; // Array para mapear IDs
+    int N;    // Número de elementos na fila
+} PriorityQueue;
+
+void PQ_init(PriorityQueue *pq, int maxN);                     // Cria uma min PQ com capacidade maxN
+void PQ_insert(PriorityQueue *pq, Item item);                  // Insere Item na PQ
+Item PQ_delmin(PriorityQueue *pq);                             // Remove Item com menor campo 'value' da PQ
+void PQ_decrease_key(PriorityQueue *pq, int id, double value); // Muda a prioridade do nó com identificador 'id'
+Item PQ_min(PriorityQueue *pq);                                // Retorna Item com menor campo 'value' da PQ
+void PQ_print(PriorityQueue *pq);                              // Imprime os elementos da PQ
+bool PQ_empty(PriorityQueue *pq);                              // Retorna True se a PQ não tem elementos
+int PQ_size(PriorityQueue *pq);                                // Número de elementos na PQ
+void PQ_finish(PriorityQueue *pq);                             // Libera memória alocada
 
 #endif // priorityQueue_H
