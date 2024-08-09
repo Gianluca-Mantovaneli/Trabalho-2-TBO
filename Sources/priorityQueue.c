@@ -63,15 +63,6 @@ Item PQ_min(PriorityQueue *pq)
     return pq->pq[1];
 }
 
-void PQ_print(PriorityQueue *pq)
-{
-    for (int i = 1; i <= pq->N; i++)
-    {
-        printf("%f ", pq->pq[i]);
-    }
-    printf("\n");
-}
-
 void PQ_decrease_key(PriorityQueue *pq, int id, double value)
 {
     int i = pq->map[id];

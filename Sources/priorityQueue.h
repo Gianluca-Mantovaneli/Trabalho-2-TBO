@@ -19,7 +19,6 @@ void PQ_insert(PriorityQueue *pq, Item item);                  // Insere Item na
 Item PQ_delmin(PriorityQueue *pq);                             // Remove Item com menor campo 'value' da PQ
 void PQ_decrease_key(PriorityQueue *pq, int id, double value); // Muda a prioridade do nó com identificador 'id'
 Item PQ_min(PriorityQueue *pq);                                // Retorna Item com menor campo 'value' da PQ
-void PQ_print(PriorityQueue *pq);                              // Imprime os elementos da PQ
 bool PQ_empty(PriorityQueue *pq);                              // Retorna True se a PQ não tem elementos
 int PQ_size(PriorityQueue *pq);                                // Número de elementos na PQ
 void PQ_finish(PriorityQueue *pq);                             // Libera memória alocada
