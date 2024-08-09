@@ -86,6 +86,21 @@ void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double 
     grafo->listaDeAdjacencia[idEmissor] = novoNode;
 }
 
+Inflacao *iniciaInflacao(int C, int S)
+{
+    Inflacao *inflacao = (Inflacao *)malloc(C * S * sizeof(Inflacao));
+    for (int i = 0; i < C; i++)
+    {
+        for (int j = 0; j < S; j++)
+        {
+            inflacao[i * S + j].idCliente = i;
+            inflacao[i * S + j].idServidor = j;
+            inflacao[i * S + j].valor = 0.0;
+        }
+    }
+    return inflacao;
+}
+
 void imprimeFilter(Filter filter)
 {
     printf("S: ");

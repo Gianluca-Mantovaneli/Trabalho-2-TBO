@@ -2,7 +2,7 @@
 #include "grafoListaDeAdjacencia.h"
 #include "dijkstra.h"
 
-void LeituraArquivo(const char *entradaPath)
+void LeituraArquivo(const char *entradaPath, const char *saidaPath)
 {
     // Leitura do arquivo de entrada
     FILE *file = fopen(entradaPath, "r");
@@ -88,8 +88,34 @@ void LeituraArquivo(const char *entradaPath)
     // Executando o algoritmo de Dijkstra
     dijkstra(grafo, 0);
 
+    // Criando a saida
+    Inflacao *resultado = iniciaInflacao(C, S);
+    EscritaArquivo(saidaPath, resultado, C, S);
+
     // Destruindo as estruturas alocadas
     destroiGrafo(grafo);
     destroiFilter(filter);
+    fclose(file);
+    free(resultado);
+}
+
+void EscritaArquivo(const char *saidaPath, Inflacao *resultado, int C, int S)
+{
+    FILE *file = fopen(saidaPath, "w");
+    if (file == NULL)
+    {
+        printf("Erro ao abrir o arquivo de saída\n");
+        return;
+    }
+
+    // Escrevendo no arquivo de saída
+    for (int i = 0; i < C; i++)
+    {
+        for (int j = 0; j < S; j++)
+        {
+            fprintf(file, "%d %d %f\n", resultado[i * S + j].idCliente, resultado[i * S + j].idServidor, resultado[i * S + j].valor);
+        }
+    }
+
     fclose(file);
 }

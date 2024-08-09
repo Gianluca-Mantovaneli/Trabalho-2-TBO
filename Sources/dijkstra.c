@@ -26,6 +26,7 @@ void dijkstra(Grafo grafo, int inicio)
     dist[inicio] = 0.0;
     PQ_insert(&pq, (Item){.id = inicio, .value = 0.0});
 
+    // Algoritmo de Dijkstra para encontrar as distâncias mínimas de um nó de origem para todos os outros
     while (!PQ_empty(&pq))
     {
         Item u = PQ_delmin(&pq);
@@ -54,11 +55,7 @@ void dijkstra(Grafo grafo, int inicio)
 
     PQ_finish(&pq);
 
-    // Output das distâncias mínimas
-    for (int i = 0; i < V; i++)
-    {
-        printf("Distância do nó %d ao nó %d: %f\n", inicio, i, dist[i]);
-    }
+TODO: // Implementar a função que calcula os rtts e imprime o resultado, nesse ponto eu tenho a lista de predecessores e as distâncias mínimas
 
     // Liberação da memória alocada
     free(dist);

@@ -28,6 +28,13 @@ typedef struct filter
     int *arraryM;
 } *Filter;
 
+typedef struct inflacao
+{
+    int idCliente;  // Identificador do cliente
+    int idServidor; // Identificador do servidor
+    double valor;   // Valor da inflação entre o RTT e RTT* de cada relação
+} Inflacao;
+
 Grafo iniciaGrafo(int V, int E);
 
 Filter iniciaFilter(int S, int C, int M);
@@ -35,6 +42,8 @@ Filter iniciaFilter(int S, int C, int M);
 Filter insereInFilter(int numero, Filter filter, int tipo);
 
 void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double peso);
+
+Inflacao *iniciaInflacao(int C, int S);
 
 void imprimeFilter(Filter filter);
 

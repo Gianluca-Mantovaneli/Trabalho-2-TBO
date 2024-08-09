@@ -8,6 +8,6 @@ int main(int argc, char const *argv[])
 {
     // Leitura do arquivo de entrada
 
-    LeituraArquivo(argv[1]);
+    LeituraArquivo(argv[1], argv[2]);
     return 0;
 }
