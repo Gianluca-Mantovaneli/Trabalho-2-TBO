@@ -101,6 +101,43 @@ Inflacao *iniciaInflacao(int C, int S)
     return inflacao;
 }
 
+Inflacao *ordenaResultado(Inflacao *resultado, int C, int S)
+{
+    // qsort(resultado, C * S, sizeof(Inflacao), comparaInflacao);
+    // TODO: resolver o problema de comparação do qsort que está dando erro
+    return resultado;
+}
+
+void InsereInflacao(Inflacao *inflacao, int idCliente, int idServidor, double valor)
+{
+    Inflacao *inflacaoAtual = &inflacao[idCliente * idServidor];
+    inflacaoAtual->valor = valor;
+    inflacaoAtual->idCliente = idCliente;
+    inflacaoAtual->idServidor = idServidor;
+    inflacao[idCliente * idServidor] = *inflacaoAtual;
+}
+
+Inflacao *calculaInflacao(Grafo grafo, Filter filter)
+{
+    int C = filter->C;
+    int S = filter->S;
+    Inflacao *resultado = iniciaInflacao(C, S);
+
+    for (int i = 0; i < C; i++)
+    {
+        for (int j = 0; j < S; j++)
+        {
+            int idCliente = filter->arraryC[i];
+            int idServidor = filter->arraryS[j];
+            // Equivalente a Equação RT T(a, b) = δ(a, b) + δ(b, a)
+            double rtt = (dijkstra(grafo, idCliente, idServidor) + dijkstra(grafo, idServidor, idCliente));
+            InsereInflacao(resultado, idCliente, idServidor, valor);
+        }
+    }
+
+    return resultado;
+}
+
 void imprimeFilter(Filter filter)
 {
     printf("S: ");

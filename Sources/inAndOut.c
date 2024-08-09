@@ -86,11 +86,10 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
     // imprimeGrafo(grafo);
 
     // Executando o algoritmo de Dijkstra
-    dijkstra(grafo, 0);
 
     // Criando a saida
-    Inflacao *resultado = iniciaInflacao(C, S);
-    EscritaArquivo(saidaPath, resultado, C, S);
+
+    EscritaArquivo(saidaPath, resultado, filter->C, filter->S);
 
     // Destruindo as estruturas alocadas
     destroiGrafo(grafo);
@@ -101,6 +100,11 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
 
 void EscritaArquivo(const char *saidaPath, Inflacao *resultado, int C, int S)
 {
+
+    // Ordenando o vetor de inflações
+    resultado = ordenaResultado(resultado, C, S);
+
+    // Abrindo o arquivo de saída
     FILE *file = fopen(saidaPath, "w");
     if (file == NULL)
     {
@@ -109,12 +113,9 @@ void EscritaArquivo(const char *saidaPath, Inflacao *resultado, int C, int S)
     }
 
     // Escrevendo no arquivo de saída
-    for (int i = 0; i < C; i++)
+    for (int i = 0; i < C * S; i++)
     {
-        for (int j = 0; j < S; j++)
-        {
-            fprintf(file, "%d %d %f\n", resultado[i * S + j].idCliente, resultado[i * S + j].idServidor, resultado[i * S + j].valor);
-        }
+        fprintf(file, "%d %d %.2f\n", resultado[i].idCliente, resultado[i].idServidor, resultado[i].valor);
     }
 
     fclose(file);

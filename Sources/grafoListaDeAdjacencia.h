@@ -35,6 +35,12 @@ typedef struct inflacao
     double valor;   // Valor da inflação entre o RTT e RTT* de cada relação
 } Inflacao;
 
+// Macros para facilitar a ordenação do resultado da inflação
+#define cliente(A) (A.idCliente)
+#define servidor(A) (A.idServidor)
+#define valor(A) (A.valor)
+#define comparaInflacao(A, B) ((A).valor < (B).valor ? -1 : ((A).valor > (B).valor ? 1 : 0))
+
 Grafo iniciaGrafo(int V, int E);
 
 Filter iniciaFilter(int S, int C, int M);
@@ -44,6 +50,12 @@ Filter insereInFilter(int numero, Filter filter, int tipo);
 void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double peso);
 
 Inflacao *iniciaInflacao(int C, int S);
+
+Inflacao *ordenaResultado(Inflacao *resultado, int C, int S);
+
+void InsereInflacao(Inflacao *inflacao, int idCliente, int idServidor, double valor);
+
+Inflacao *calculaInflacao(Grafo grafo, Filter filter);
 
 void imprimeFilter(Filter filter);
 

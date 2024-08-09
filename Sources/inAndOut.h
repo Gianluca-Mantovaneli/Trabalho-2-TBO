@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "grafoListaDeAdjacencia.h"
+#include "dijkstra.h"
 
 void LeituraArquivo(const char *entradaPath, const char *saidaPath);
 void EscritaArquivo(const char *saidaPath, Inflacao *resultado, int C, int S);

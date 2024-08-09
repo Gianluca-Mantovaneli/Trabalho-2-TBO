@@ -1,9 +1,5 @@
-#include "priorityQueue.h"
-#include "grafoListaDeAdjacencia.h"
-#include <limits.h>
-#include <stdbool.h>
-
-void dijkstra(Grafo grafo, int inicio)
+#include "dijkstra.h"
+double dijkstra(Grafo grafo, int origem, int destino)
 {
     int V = grafo->V;
 
@@ -23,8 +19,8 @@ void dijkstra(Grafo grafo, int inicio)
         visitado[i] = false;
     }
 
-    dist[inicio] = 0.0;
-    PQ_insert(&pq, (Item){.id = inicio, .value = 0.0});
+    dist[origem] = 0.0;
+    PQ_insert(&pq, (Item){.id = origem, .value = 0.0});
 
     // Algoritmo de Dijkstra para encontrar as distâncias mínimas de um nó de origem para todos os outros
     while (!PQ_empty(&pq))
@@ -35,6 +31,10 @@ void dijkstra(Grafo grafo, int inicio)
         if (visitado[u_id])
             continue;
         visitado[u_id] = true;
+
+        // Verifica se alcançamos o destino, se sim, podemos parar a busca
+        if (u_id == destino)
+            break;
 
         Node *vizinho = grafo->listaDeAdjacencia[u_id];
         while (vizinho != NULL)
@@ -53,12 +53,14 @@ void dijkstra(Grafo grafo, int inicio)
         }
     }
 
-    PQ_finish(&pq);
+    double distanciaMinima = dist[destino]; // Armazena a distância mínima para o destino
 
-TODO: // Implementar a função que calcula os rtts e imprime o resultado, nesse ponto eu tenho a lista de predecessores e as distâncias mínimas
+    PQ_finish(&pq);
 
     // Liberação da memória alocada
     free(dist);
     free(prev);
     free(visitado);
+
+    return distanciaMinima; // Retorna a menor distância entre a origem e o destino
 }
