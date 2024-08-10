@@ -58,7 +58,7 @@ RTT *ordenaResultado(RTT *resultado, int C, int S);
 
 void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor, int S);
 
-RTT *calculaInflacao(Grafo grafo, Filter filter);
+void calculaInflacao(Grafo grafo, Filter filter, const char *saidaPath);
 
 double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor); // Função que calcula o valor do RTT entre um cliente e um servidor
 

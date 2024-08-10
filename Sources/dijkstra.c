@@ -59,6 +59,9 @@ double dijkstra(Grafo grafo, int origem, int destino)
     free(dist);
     free(prev);
     free(visitado);
+    dist = NULL;
+    prev = NULL;
+    visitado = NULL;
     PQ_finish(&pq);
 
     return distanciaMinima; // Retorna a menor distância entre a origem e o destino

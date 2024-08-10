@@ -127,11 +127,15 @@ void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor, 
         fprintf(stderr, "Erro: ponteiro inflacao é NULL\n");
         exit(EXIT_FAILURE);
     }
-    inflacao[idCliente * S + idServidor].valor = valor;
+    else
+    {
+        inflacao[idCliente * S + idServidor].valor = valor;
+    }
 }
 
-RTT *calculaInflacao(Grafo grafo, Filter filter)
+void calculaInflacao(Grafo grafo, Filter filter, const char *saidaPath)
 {
+
     int C = filter->C;
     int S = filter->S;
     double rtt, rttEstrela, resultado = 0.0; // Variáveis para armazenar os valores de RTT, RTT* e inflação
@@ -149,8 +153,23 @@ RTT *calculaInflacao(Grafo grafo, Filter filter)
             InsereInflacao(inflacao, idCliente, idServidor, resultado, S);
         }
     }
+    inflacao = ordenaResultado(inflacao, C, S); // Ordena o vetor de inflações
 
-    return inflacao;
+    // Abrindo o arquivo de saída
+    FILE *file = fopen(saidaPath, "w");
+    if (file == NULL)
+    {
+        printf("Erro ao abrir o arquivo de saída\n");
+        return;
+    }
+    for (int i = 0; i < C * S; i++)
+    {
+        fprintf(file, "%d %d %.2f\n", inflacao[i].idServidor, inflacao[i].idCliente, inflacao[i].valor);
+    }
+
+    // Libera a memória alocada
+    destroiInflacao(inflacao);
+    fclose(file);
 }
 
 double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor)

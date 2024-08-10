@@ -80,18 +80,11 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
         insereArestaDirecionada(grafo, idEmissor, idReceptor, peso);
     }
 
-    // Exibindo os valores lidos
-    // imprimeFilter(filter);
-    // printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-    // imprimeGrafo(grafo);
+    // Calculando a inflação
 
-    // Executando o algoritmo de Dijkstra
+    calculaInflacao(grafo, filter, saidaPath);
 
-    // Criando a saida
-
-    RTT *resultado = calculaInflacao(grafo, filter);
-
-    EscritaArquivo(saidaPath, resultado, filter->C, filter->S);
+    // EscritaArquivo(saidaPath, resultado, filter->C, filter->S);
 
     // Destruindo as estruturas alocadas
     destroiGrafo(grafo);
