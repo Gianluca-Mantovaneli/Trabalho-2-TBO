@@ -8,6 +8,6 @@
 #include "dijkstra.h"
 
 void LeituraArquivo(const char *entradaPath, const char *saidaPath);
-void EscritaArquivo(const char *saidaPath, Inflacao *resultado, int C, int S);
+void EscritaArquivo(const char *saidaPath, RTT *resultado, int C, int S);
 
 #endif // inAndOut_H

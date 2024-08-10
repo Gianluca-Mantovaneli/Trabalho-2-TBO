@@ -5,8 +5,10 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <stdbool.h>
-#include "grafoListaDeAdjacencia.h"
 #include "priorityQueue.h"
+#include "grafoListaDeAdjacencia.h"
+
+typedef struct grafo *Grafo;
 
 double dijkstra(Grafo grafo, int origem, int destino); // Função que calcula o valor do menor caminho entre dois vértices de um grafo
 

@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+#include "dijkstra.h"
 
 typedef struct node
 {
@@ -28,18 +30,18 @@ typedef struct filter
     int *arraryM;
 } *Filter;
 
-typedef struct inflacao
+typedef struct rtt
 {
     int idCliente;  // Identificador do cliente
     int idServidor; // Identificador do servidor
-    double valor;   // Valor da inflação entre o RTT e RTT* de cada relação
-} Inflacao;
+    double valor;   // Valor da relação RTT entre cliente e servidor
+} RTT;
 
 // Macros para facilitar a ordenação do resultado da inflação
 #define cliente(A) (A.idCliente)
 #define servidor(A) (A.idServidor)
 #define valor(A) (A.valor)
-#define comparaInflacao(A, B) ((A).valor < (B).valor ? -1 : ((A).valor > (B).valor ? 1 : 0))
+#define comparaRTT(A, B) ((A).valor < (B).valor ? -1 : ((A).valor > (B).valor ? 1 : 0))
 
 Grafo iniciaGrafo(int V, int E);
 
@@ -49,13 +51,17 @@ Filter insereInFilter(int numero, Filter filter, int tipo);
 
 void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double peso);
 
-Inflacao *iniciaInflacao(int C, int S);
+RTT *iniciaInflacao(int C, int S);
 
-Inflacao *ordenaResultado(Inflacao *resultado, int C, int S);
+RTT *ordenaResultado(RTT *resultado, int C, int S);
 
-void InsereInflacao(Inflacao *inflacao, int idCliente, int idServidor, double valor);
+void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor);
 
-Inflacao *calculaInflacao(Grafo grafo, Filter filter);
+RTT *calculaInflacao(Grafo grafo, Filter filter);
+
+double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor); // Função que calcula o valor do RTT entre um cliente e um servidor
+
+double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor); // Função que calcula o valor do RTT* entre um cliente e um servidor
 
 void imprimeFilter(Filter filter);
 
@@ -64,5 +70,7 @@ void imprimeGrafo(Grafo grafo);
 void destroiGrafo(Grafo grafo);
 
 void destroiFilter(Filter filter);
+
+void destroiInflacao(RTT *inflacao);
 
 #endif // grafoListaDeAdjacencia_H

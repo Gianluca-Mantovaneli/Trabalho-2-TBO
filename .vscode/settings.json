@@ -3,6 +3,7 @@
     "files.associations": {
         "*.c": "c",
         "grafolistadeadjacencia.h": "c",
-        "item.h": "c"
+        "item.h": "c",
+        "priorityqueue.h": "c"
     }
 }

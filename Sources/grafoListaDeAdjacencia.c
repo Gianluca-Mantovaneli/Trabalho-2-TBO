@@ -86,9 +86,9 @@ void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double 
     grafo->listaDeAdjacencia[idEmissor] = novoNode;
 }
 
-Inflacao *iniciaInflacao(int C, int S)
+RTT *iniciaInflacao(int C, int S)
 {
-    Inflacao *inflacao = (Inflacao *)malloc(C * S * sizeof(Inflacao));
+    RTT *inflacao = (RTT *)malloc(C * S * sizeof(RTT));
     for (int i = 0; i < C; i++)
     {
         for (int j = 0; j < S; j++)
@@ -101,27 +101,24 @@ Inflacao *iniciaInflacao(int C, int S)
     return inflacao;
 }
 
-Inflacao *ordenaResultado(Inflacao *resultado, int C, int S)
+RTT *ordenaResultado(RTT *resultado, int C, int S)
 {
     // qsort(resultado, C * S, sizeof(Inflacao), comparaInflacao);
     // TODO: resolver o problema de comparação do qsort que está dando erro
     return resultado;
 }
 
-void InsereInflacao(Inflacao *inflacao, int idCliente, int idServidor, double valor)
+void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor)
 {
-    Inflacao *inflacaoAtual = &inflacao[idCliente * idServidor];
-    inflacaoAtual->valor = valor;
-    inflacaoAtual->idCliente = idCliente;
-    inflacaoAtual->idServidor = idServidor;
-    inflacao[idCliente * idServidor] = *inflacaoAtual;
+    inflacao[idCliente * idServidor].valor = valor;
 }
 
-Inflacao *calculaInflacao(Grafo grafo, Filter filter)
+RTT *calculaInflacao(Grafo grafo, Filter filter)
 {
     int C = filter->C;
     int S = filter->S;
-    Inflacao *resultado = iniciaInflacao(C, S);
+    double rtt, rttEstrela, resultado = 0.0; // Variáveis para armazenar os valores de RTT, RTT* e inflação
+    RTT *inflacao = iniciaInflacao(C, S);    // Inicializa o vetor de inflações
 
     for (int i = 0; i < C; i++)
     {
@@ -129,13 +126,34 @@ Inflacao *calculaInflacao(Grafo grafo, Filter filter)
         {
             int idCliente = filter->arraryC[i];
             int idServidor = filter->arraryS[j];
-            // Equivalente a Equação RT T(a, b) = δ(a, b) + δ(b, a)
-            double rtt = (dijkstra(grafo, idCliente, idServidor) + dijkstra(grafo, idServidor, idCliente));
-            InsereInflacao(resultado, idCliente, idServidor, valor);
+            rtt = calculaRTT(grafo, filter, idCliente, idServidor);               // Equivalente a Equação RT T(a, b) = δ(a, b) + δ(b, a)
+            rttEstrela = calculaRTTEstrela(grafo, filter, idCliente, idServidor); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
+            resultado = rttEstrela / rtt;                                         // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
+            InsereInflacao(inflacao, idCliente, idServidor, resultado);
         }
     }
 
-    return resultado;
+    return inflacao;
+}
+
+double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor)
+{
+    return (dijkstra(grafo, idCliente, idServidor) + dijkstra(grafo, idServidor, idCliente));
+}
+
+double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor)
+{
+    double rtt = INT_MAX;
+    for (int i = 0; i < filter->M; i++)
+    {
+        int idMonitor = filter->arraryM[i];
+        double rttAtual = dijkstra(grafo, idCliente, idMonitor) + dijkstra(grafo, idMonitor, idServidor);
+        if (rttAtual < rtt)
+        {
+            rtt = rttAtual;
+        }
+    }
+    return rtt;
 }
 
 void imprimeFilter(Filter filter)
@@ -195,4 +213,9 @@ void destroiFilter(Filter filter)
     free(filter->arraryC);
     free(filter->arraryM);
     free(filter);
+}
+
+void destroiInflacao(RTT *inflacao)
+{
+    free(inflacao);
 }
