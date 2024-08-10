@@ -116,7 +116,7 @@ void EscritaArquivo(const char *saidaPath, RTT *resultado, int C, int S)
     // Escrevendo no arquivo de saída
     for (int i = 0; i < C * S; i++)
     {
-        fprintf(file, "%d %d %.2f\n", resultado[i].idCliente, resultado[i].idServidor, resultado[i].valor);
+        fprintf(file, "%d %d %.2f\n", resultado[i].idServidor, resultado[i].idCliente, resultado[i].valor);
     }
 
     // Fechando o arquivo de saída
