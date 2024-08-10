@@ -41,7 +41,8 @@ typedef struct rtt
 #define cliente(A) (A.idCliente)
 #define servidor(A) (A.idServidor)
 #define valor(A) (A.valor)
-#define comparaRTT(A, B) ((A).valor < (B).valor ? -1 : ((A).valor > (B).valor ? 1 : 0))
+
+int comparaRTT(const void *a, const void *b);
 
 Grafo iniciaGrafo(int V, int E);
 
@@ -55,7 +56,7 @@ RTT *iniciaInflacao(Filter filter);
 
 RTT *ordenaResultado(RTT *resultado, int C, int S);
 
-void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor);
+void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor, int S);
 
 RTT *calculaInflacao(Grafo grafo, Filter filter);
 

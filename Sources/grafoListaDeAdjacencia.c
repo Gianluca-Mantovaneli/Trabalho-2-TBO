@@ -1,5 +1,16 @@
 #include "grafoListaDeAdjacencia.h"
 
+int comparaRTT(const void *a, const void *b)
+{
+    RTT *rttA = (RTT *)a;
+    RTT *rttB = (RTT *)b;
+    if (rttA->valor < rttB->valor)
+        return -1;
+    if (rttA->valor > rttB->valor)
+        return 1;
+    return 0;
+}
+
 Grafo iniciaGrafo(int V, int E)
 {
     Grafo grafo = (Grafo)malloc(sizeof(struct grafo));
@@ -105,19 +116,18 @@ RTT *iniciaInflacao(Filter filter)
 
 RTT *ordenaResultado(RTT *resultado, int C, int S)
 {
-    // qsort(resultado, C * S, sizeof(Inflacao), comparaInflacao);
-    // TODO: resolver o problema de comparação do qsort que está dando erro
+    qsort(resultado, C * S, sizeof(RTT), comparaRTT);
     return resultado;
 }
 
-void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor)
+void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor, int S)
 {
     if (inflacao == NULL)
     {
         fprintf(stderr, "Erro: ponteiro inflacao é NULL\n");
         exit(EXIT_FAILURE);
     }
-    inflacao[idCliente * idServidor].valor = valor;
+    inflacao[idCliente * S + idServidor].valor = valor;
 }
 
 RTT *calculaInflacao(Grafo grafo, Filter filter)
@@ -136,7 +146,7 @@ RTT *calculaInflacao(Grafo grafo, Filter filter)
             rtt = calculaRTT(grafo, filter, idCliente, idServidor);               // Equivalente a Equação RT T(a, b) = δ(a, b) + δ(b, a)
             rttEstrela = calculaRTTEstrela(grafo, filter, idCliente, idServidor); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
             resultado = rttEstrela / rtt;                                         // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
-            InsereInflacao(inflacao, idCliente, idServidor, resultado);
+            InsereInflacao(inflacao, idCliente, idServidor, resultado, S);
         }
     }
 
