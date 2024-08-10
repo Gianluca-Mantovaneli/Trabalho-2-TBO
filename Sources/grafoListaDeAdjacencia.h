@@ -51,7 +51,7 @@ Filter insereInFilter(int numero, Filter filter, int tipo);
 
 void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double peso);
 
-RTT *iniciaInflacao(int C, int S);
+RTT *iniciaInflacao(Filter filter);
 
 RTT *ordenaResultado(RTT *resultado, int C, int S);
 

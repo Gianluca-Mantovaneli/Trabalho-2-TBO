@@ -86,15 +86,17 @@ void insereArestaDirecionada(Grafo grafo, int idEmissor, int idReceptor, double 
     grafo->listaDeAdjacencia[idEmissor] = novoNode;
 }
 
-RTT *iniciaInflacao(int C, int S)
+RTT *iniciaInflacao(Filter filter)
 {
+    int C = filter->C;
+    int S = filter->S;
     RTT *inflacao = (RTT *)malloc(C * S * sizeof(RTT));
     for (int i = 0; i < C; i++)
     {
         for (int j = 0; j < S; j++)
         {
-            inflacao[i * S + j].idCliente = i;
-            inflacao[i * S + j].idServidor = j;
+            inflacao[i * S + j].idCliente = filter->arraryC[i];
+            inflacao[i * S + j].idServidor = filter->arraryS[j];
             inflacao[i * S + j].valor = 0.0;
         }
     }
@@ -110,6 +112,11 @@ RTT *ordenaResultado(RTT *resultado, int C, int S)
 
 void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor)
 {
+    if (inflacao == NULL)
+    {
+        fprintf(stderr, "Erro: ponteiro inflacao é NULL\n");
+        exit(EXIT_FAILURE);
+    }
     inflacao[idCliente * idServidor].valor = valor;
 }
 
@@ -118,7 +125,7 @@ RTT *calculaInflacao(Grafo grafo, Filter filter)
     int C = filter->C;
     int S = filter->S;
     double rtt, rttEstrela, resultado = 0.0; // Variáveis para armazenar os valores de RTT, RTT* e inflação
-    RTT *inflacao = iniciaInflacao(C, S);    // Inicializa o vetor de inflações
+    RTT *inflacao = iniciaInflacao(filter);  // Inicializa o vetor de inflações
 
     for (int i = 0; i < C; i++)
     {
@@ -174,6 +181,21 @@ void imprimeFilter(Filter filter)
         printf("%d ", filter->arraryM[i]);
     }
     printf("\n");
+}
+
+int *getArrayS(Filter filter)
+{
+    return filter->arraryS;
+}
+
+int *getArrayC(Filter filter)
+{
+    return filter->arraryC;
+}
+
+int *getArrayM(Filter filter)
+{
+    return filter->arraryM;
 }
 
 void imprimeGrafo(Grafo grafo)

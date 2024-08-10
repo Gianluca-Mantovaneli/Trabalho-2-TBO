@@ -55,12 +55,11 @@ double dijkstra(Grafo grafo, int origem, int destino)
 
     double distanciaMinima = dist[destino]; // Armazena a distância mínima para o destino
 
-    PQ_finish(&pq);
-
     // Liberação da memória alocada
     free(dist);
     free(prev);
     free(visitado);
+    PQ_finish(&pq);
 
     return distanciaMinima; // Retorna a menor distância entre a origem e o destino
 }

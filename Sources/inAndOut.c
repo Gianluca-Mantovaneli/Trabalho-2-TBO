@@ -89,7 +89,9 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
 
     // Criando a saida
 
-    EscritaArquivo(saidaPath, calculaInflacao(grafo, filter), filter->C, filter->S);
+    RTT *resultado = calculaInflacao(grafo, filter);
+
+    EscritaArquivo(saidaPath, resultado, filter->C, filter->S);
 
     // Destruindo as estruturas alocadas
     destroiGrafo(grafo);

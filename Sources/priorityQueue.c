@@ -82,6 +82,14 @@ int PQ_size(PriorityQueue *pq)
 
 void PQ_finish(PriorityQueue *pq)
 {
-    free(pq->pq);
-    free(pq->map);
+    if (pq->pq != NULL)
+    {
+        free(pq->pq);
+        pq->pq = NULL; // Definir para NULL após liberar
+    }
+    if (pq->map != NULL)
+    {
+        free(pq->map);
+        pq->map = NULL; // Definir para NULL após liberar
+    }
 }
