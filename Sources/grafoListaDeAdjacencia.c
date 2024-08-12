@@ -132,7 +132,7 @@ void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor)
     }
 }
 
-void calculaInflacao(Grafo grafo, Filter filter, const char *saidaPath)
+RTT *calculaInflacao(Grafo grafo, Filter filter)
 {
 
     int C = filter->C;
@@ -151,31 +151,16 @@ void calculaInflacao(Grafo grafo, Filter filter, const char *saidaPath)
             resultado = rttEstrela / rtt;                                         // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
 
             // testando
-            printf("RTT(%d, %d) = %lf\n", idServidor, idCliente, rtt);
-            printf("RTT*(%d, %d) = %lf\n", idServidor, idCliente, rttEstrela);
-            printf("Inflação(%d, %d) = %lf\n", idServidor, idCliente, resultado);
-            printf("\n");
+            // printf("RTT(%d, %d) = %lf\n", idServidor, idCliente, rtt);
+            // printf("RTT*(%d, %d) = %lf\n", idServidor, idCliente, rttEstrela);
+            // printf("Inflação(%d, %d) = %lf\n", idServidor, idCliente, resultado);
+            // printf("\n");
 
             InsereInflacao(inflacao, idCliente, idServidor, resultado);
         }
     }
     inflacao = ordenaResultado(inflacao, C, S); // Ordena o vetor de inflações
-
-    // Abrindo o arquivo de saída
-    FILE *file = fopen(saidaPath, "w");
-    if (file == NULL)
-    {
-        printf("Erro ao abrir o arquivo de saída\n");
-        return;
-    }
-    for (int i = 0; i < C * S; i++)
-    {
-        fprintf(file, "%d %d %f\n", inflacao[i].idServidor, inflacao[i].idCliente, inflacao[i].valor);
-    }
-
-    // Libera a memória alocada
-    destroiInflacao(inflacao);
-    fclose(file);
+    return inflacao;
 }
 
 double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor)
@@ -185,7 +170,7 @@ double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor)
 
 double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor)
 {
-    double rtt = INT_MAX;
+    double rtt = DBL_MAX;
     for (int i = 0; i < filter->M; i++)
     {
         int idMonitor = filter->arraryM[i];

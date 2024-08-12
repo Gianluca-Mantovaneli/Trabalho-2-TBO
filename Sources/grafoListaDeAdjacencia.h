@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
+#include <float.h>
 #include "dijkstra.h"
 
 typedef struct node
@@ -58,7 +58,7 @@ RTT *ordenaResultado(RTT *resultado, int C, int S);
 
 void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor);
 
-void calculaInflacao(Grafo grafo, Filter filter, const char *saidaPath);
+RTT *calculaInflacao(Grafo grafo, Filter filter);
 
 double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor); // Função que calcula o valor do RTT entre um cliente e um servidor
 

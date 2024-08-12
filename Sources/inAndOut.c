@@ -81,12 +81,10 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
     }
 
     // Calculando a inflação
+    RTT *resultado = calculaInflacao(grafo, filter);
 
-    imprimeGrafo(grafo);
-    printf("\n");
-    calculaInflacao(grafo, filter, saidaPath);
-
-    // EscritaArquivo(saidaPath, resultado, filter->C, filter->S);
+    // Escrevendo o resultado no arquivo de saída
+    EscritaArquivo(saidaPath, resultado, filter->C, filter->S);
 
     // Destruindo as estruturas alocadas
     destroiGrafo(grafo);
@@ -96,10 +94,6 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
 
 void EscritaArquivo(const char *saidaPath, RTT *resultado, int C, int S)
 {
-
-    // Ordenando o vetor de inflações
-    resultado = ordenaResultado(resultado, C, S);
-
     // Abrindo o arquivo de saída
     FILE *file = fopen(saidaPath, "w");
     if (file == NULL)
@@ -111,7 +105,7 @@ void EscritaArquivo(const char *saidaPath, RTT *resultado, int C, int S)
     // Escrevendo no arquivo de saída
     for (int i = 0; i < C * S; i++)
     {
-        fprintf(file, "%d %d %.2f\n", resultado[i].idServidor, resultado[i].idCliente, resultado[i].valor);
+        fprintf(file, "%d %d %.16f\n", resultado[i].idServidor, resultado[i].idCliente, resultado[i].valor);
     }
 
     // Fechando o arquivo de saída
