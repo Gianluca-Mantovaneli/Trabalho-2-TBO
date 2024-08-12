@@ -14,7 +14,7 @@ double dijkstra(Grafo grafo, int origem, int destino)
     // Inicializando as distâncias, predecessores e visitados
     for (int i = 0; i < V; i++)
     {
-        dist[i] = INT_MAX;
+        dist[i] = __DBL_MAX__;
         prev[i] = -1;
         visitado[i] = false;
     }
@@ -28,7 +28,7 @@ double dijkstra(Grafo grafo, int origem, int destino)
         Item u = PQ_delmin(&pq);
         int u_id = u.id;
 
-        if (visitado[u_id])
+        if (visitado[u_id]) // Se o nó já foi visitado, podemos ignorá-lo
             continue;
         visitado[u_id] = true;
 
@@ -59,9 +59,6 @@ double dijkstra(Grafo grafo, int origem, int destino)
     free(dist);
     free(prev);
     free(visitado);
-    dist = NULL;
-    prev = NULL;
-    visitado = NULL;
     PQ_finish(&pq);
 
     return distanciaMinima; // Retorna a menor distância entre a origem e o destino

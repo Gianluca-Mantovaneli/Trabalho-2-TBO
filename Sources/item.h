@@ -9,7 +9,7 @@ typedef struct
 
 #define id(A) (A.id)                     // retorna identificador deste nó
 #define value(A) (A.value)               // retorna o valor deste nó
-#define more(A, B) (value(A) < value(B)) // compara nós, por valor
+#define more(A, B) (value(A) > value(B)) // compara nós, por valor
 #define exch(A, B)  \
     {               \
         Item t = A; \
