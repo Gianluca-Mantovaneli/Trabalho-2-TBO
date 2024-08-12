@@ -56,7 +56,7 @@ RTT *iniciaInflacao(Filter filter);
 
 RTT *ordenaResultado(RTT *resultado, int C, int S);
 
-void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor, int S);
+void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor);
 
 void calculaInflacao(Grafo grafo, Filter filter, const char *saidaPath);
 

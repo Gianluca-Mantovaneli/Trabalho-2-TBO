@@ -120,16 +120,15 @@ RTT *ordenaResultado(RTT *resultado, int C, int S)
     return resultado;
 }
 
-void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor, int S)
+void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor)
 {
-    if (inflacao == NULL)
+    for (int i = 0; i < sizeof(inflacao); i++)
     {
-        fprintf(stderr, "Erro: ponteiro inflacao é NULL\n");
-        exit(EXIT_FAILURE);
-    }
-    else
-    {
-        inflacao[idCliente * S + idServidor].valor = valor;
+        if (inflacao[i].idCliente == idCliente && inflacao[i].idServidor == idServidor)
+        {
+            inflacao[i].valor = valor;
+            break;
+        }
     }
 }
 
@@ -150,7 +149,7 @@ void calculaInflacao(Grafo grafo, Filter filter, const char *saidaPath)
             rtt = calculaRTT(grafo, filter, idCliente, idServidor);               // Equivalente a Equação RT T(a, b) = δ(a, b) + δ(b, a)
             rttEstrela = calculaRTTEstrela(grafo, filter, idCliente, idServidor); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
             resultado = rttEstrela / rtt;                                         // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
-            InsereInflacao(inflacao, idCliente, idServidor, resultado, S);
+            InsereInflacao(inflacao, idCliente, idServidor, resultado);
         }
     }
     inflacao = ordenaResultado(inflacao, C, S); // Ordena o vetor de inflações
@@ -164,7 +163,7 @@ void calculaInflacao(Grafo grafo, Filter filter, const char *saidaPath)
     }
     for (int i = 0; i < C * S; i++)
     {
-        fprintf(file, "%d %d %.2f\n", inflacao[i].idServidor, inflacao[i].idCliente, inflacao[i].valor);
+        fprintf(file, "%d %d %f\n", inflacao[i].idServidor, inflacao[i].idCliente, inflacao[i].valor);
     }
 
     // Libera a memória alocada
