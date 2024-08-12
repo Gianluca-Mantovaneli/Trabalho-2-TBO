@@ -146,9 +146,16 @@ void calculaInflacao(Grafo grafo, Filter filter, const char *saidaPath)
         {
             int idCliente = filter->arraryC[i];
             int idServidor = filter->arraryS[j];
-            rtt = calculaRTT(grafo, filter, idCliente, idServidor);               // Equivalente a Equação RT T(a, b) = δ(a, b) + δ(b, a)
+            rtt = calculaRTT(grafo, filter, idCliente, idServidor);               // Equivalente a Equação RTT(a, b) = δ(a, b) + δ(b, a)
             rttEstrela = calculaRTTEstrela(grafo, filter, idCliente, idServidor); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
             resultado = rttEstrela / rtt;                                         // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
+
+            // testando
+            printf("RTT(%d, %d) = %lf\n", idServidor, idCliente, rtt);
+            printf("RTT*(%d, %d) = %lf\n", idServidor, idCliente, rttEstrela);
+            printf("Inflação(%d, %d) = %lf\n", idServidor, idCliente, resultado);
+            printf("\n");
+
             InsereInflacao(inflacao, idCliente, idServidor, resultado);
         }
     }

@@ -82,6 +82,8 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
 
     // Calculando a inflação
 
+    imprimeGrafo(grafo);
+    printf("\n");
     calculaInflacao(grafo, filter, saidaPath);
 
     // EscritaArquivo(saidaPath, resultado, filter->C, filter->S);
