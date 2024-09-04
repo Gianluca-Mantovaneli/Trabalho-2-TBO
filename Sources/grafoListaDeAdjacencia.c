@@ -151,10 +151,10 @@ RTT *calculaInflacao(Grafo grafo, Filter filter)
             resultado = rttEstrela / rtt;                                         // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
 
             // testando
-            // printf("RTT(%d, %d) = %lf\n", idServidor, idCliente, rtt);
-            // printf("RTT*(%d, %d) = %lf\n", idServidor, idCliente, rttEstrela);
-            // printf("Inflação(%d, %d) = %lf\n", idServidor, idCliente, resultado);
-            // printf("\n");
+            printf("RTT*(%d, %d) = %lf\n", idServidor, idCliente, rttEstrela);
+            printf("RTT(%d, %d) = %lf\n", idServidor, idCliente, rtt);
+            printf("Inflação(%d, %d) = %lf\n", idServidor, idCliente, resultado);
+            printf("\n");
 
             InsereInflacao(inflacao, idCliente, idServidor, resultado);
         }
