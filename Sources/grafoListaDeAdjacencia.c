@@ -163,27 +163,30 @@ RTT *calculaInflacao(Grafo grafo, Filter filter)
     return inflacao;
 }
 
-double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor)
-{
-    return (dijkstra(grafo, idCliente, idServidor) + dijkstra(grafo, idServidor, idCliente));
+double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias) {
+    if (distancias[idCliente][idServidor] == INF) {
+        // Calcula e armazena o RTT nos dois sentidos
+        distancias[idCliente][idServidor] = dijkstra(grafo, idCliente, idServidor);
+        distancias[idServidor][idCliente] = dijkstra(grafo, idServidor, idCliente);
+    }
+    return distancias[idCliente][idServidor] + distancias[idServidor][idCliente];
 }
 
-double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor)
-{
-    double rtt = DBL_MAX;
-    for (int i = 0; i < filter->M; i++)
-    {
+double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias) {
+    double rtt = INF;
+    for (int i = 0; i < filter->M; i++) {
         int idMonitor = filter->arraryM[i];
-        double rttAtual = dijkstra(grafo, idCliente, idMonitor) + dijkstra(grafo, idMonitor, idServidor);
-        if (rttAtual < rtt)
-        {
+        if (distancias[idCliente][idMonitor] == INF) {
+            // Calcula e armazena o RTT parcial se necessário
+            distancias[idCliente][idMonitor] = dijkstra(grafo, idCliente, idMonitor);
+            distancias[idMonitor][idServidor] = dijkstra(grafo, idMonitor, idServidor);
+        }
+        double rttAtual = distancias[idCliente][idMonitor] + distancias[idMonitor][idServidor];
+        if (rttAtual < rtt) {
             rtt = rttAtual;
         }
     }
     return rtt;
-}
-
-
 
 int *getArrayS(Filter filter)
 {
@@ -200,7 +203,28 @@ int *getArrayM(Filter filter)
     return filter->arraryM;
 }
 
+double **IniciaMatriz(int V)
+{
+    double **matriz = (double **)malloc(V * sizeof(double *));
+    for (int i = 0; i < V; i++)
+    {
+        matriz[i] = (double *)malloc(V * sizeof(double));
+        for (int j = 0; j < V; j++)
+        {
+            matriz[i][j] = DBL_MAX;
+        }
+    }
+    return matriz;
+}
 
+void DestroiMatriz(double **matriz, int V)
+{
+    for (int i = 0; i < V; i++)
+    {
+        free(matriz[i]);
+    }
+    free(matriz);
+}
 
 void destroiGrafo(Grafo grafo)
 {
