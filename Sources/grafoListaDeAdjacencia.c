@@ -183,25 +183,7 @@ double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServid
     return rtt;
 }
 
-void imprimeFilter(Filter filter)
-{
-    printf("S: ");
-    for (int i = 0; i < filter->S; i++)
-    {
-        printf("%d ", filter->arraryS[i]);
-    }
-    printf("\nC: ");
-    for (int i = 0; i < filter->C; i++)
-    {
-        printf("%d ", filter->arraryC[i]);
-    }
-    printf("\nM: ");
-    for (int i = 0; i < filter->M; i++)
-    {
-        printf("%d ", filter->arraryM[i]);
-    }
-    printf("\n");
-}
+
 
 int *getArrayS(Filter filter)
 {
