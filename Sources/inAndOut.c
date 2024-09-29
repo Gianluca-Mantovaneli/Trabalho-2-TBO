@@ -80,6 +80,8 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
         insereArestaDirecionada(grafo, idEmissor, idReceptor, peso);
     }
 
+    //TODO: Mudar a função de djikstra para que ela crie uma tabela com os caminhos mínimos de todos os vértices para todos os outros
+
     // Calculando a inflação
     RTT *resultado = calculaInflacao(grafo, filter);
 
