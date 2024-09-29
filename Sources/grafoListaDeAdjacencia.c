@@ -218,20 +218,7 @@ int *getArrayM(Filter filter)
     return filter->arraryM;
 }
 
-void imprimeGrafo(Grafo grafo)
-{
-    for (int i = 0; i < grafo->V; i++)
-    {
-        Node *atual = grafo->listaDeAdjacencia[i];
-        printf("Vértice %d: ", i);
-        while (atual != NULL)
-        {
-            printf(" -> %d(%lf) ", atual->id, atual->peso);
-            atual = atual->prox;
-        }
-        printf("\n");
-    }
-}
+
 
 void destroiGrafo(Grafo grafo)
 {
