@@ -149,12 +149,6 @@ RTT *calculaInflacao(Grafo grafo, Filter filter, double **distancias)
             rttEstrela = calculaRTTEstrela(filter, idCliente, idServidor, distancias); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
             resultado = rttEstrela / rtt;                                              // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
 
-            // testando
-            printf("RTT*(%d, %d) = %lf\n", idServidor, idCliente, rttEstrela);
-            printf("RTT(%d, %d) = %lf\n", idServidor, idCliente, rtt);
-            printf("Inflação(%d, %d) = %lf\n", idServidor, idCliente, resultado);
-            printf("\n");
-
             InsereInflacao(inflacao, C * S, idCliente, idServidor, resultado);
         }
     }
@@ -172,7 +166,7 @@ double calculaRTTEstrela(Filter filter, int idCliente, int idServidor, double **
     double rtt = INFINITO; // Inicializa o RTT* com um valor grande
 
     // Percorre os monitores para ver se há um caminho melhor
-    printf("Calculando RTT* entre %d e %d\n", idServidor, idCliente);
+
     for (int i = 0; i < filter->M; i++)
     {
         int idMonitor = filter->arraryM[i];
@@ -182,7 +176,7 @@ double calculaRTTEstrela(Filter filter, int idCliente, int idServidor, double **
         {
             // Calcula o RTT passando pelo monitor
             double rttAtual = distancias[idServidor][idMonitor] + distancias[idMonitor][idCliente];
-            printf("RTT*(%d, %d) + (%d, %d) = %lf\n", idServidor, idMonitor, idMonitor, idCliente, rttAtual);
+    
 
             // Se o RTT pelo monitor for menor, atualiza
             if (rttAtual < rtt)
@@ -191,7 +185,6 @@ double calculaRTTEstrela(Filter filter, int idCliente, int idServidor, double **
             }
         }
     }
-    printf("\n");
 
     return rtt; // Retorna o RTT* calculado
 }
