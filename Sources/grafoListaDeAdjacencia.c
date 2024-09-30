@@ -120,9 +120,9 @@ RTT *ordenaResultado(RTT *resultado, int C, int S)
     return resultado;
 }
 
-void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor)
+void InsereInflacao(RTT *inflacao, int tamanho, int idCliente, int idServidor, double valor)
 {
-    for (int i = 0; i < sizeof(inflacao); i++)
+    for (int i = 0; i < tamanho; i++)
     {
         if (inflacao[i].idCliente == idCliente && inflacao[i].idServidor == idServidor)
         {
@@ -132,9 +132,8 @@ void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor)
     }
 }
 
-RTT *calculaInflacao(Grafo grafo, Filter filter)
+RTT *calculaInflacao(Grafo grafo, Filter filter, double **distancias)
 {
-
     int C = filter->C;
     int S = filter->S;
     double rtt, rttEstrela, resultado = 0.0; // Variáveis para armazenar os valores de RTT, RTT* e inflação
@@ -146,61 +145,48 @@ RTT *calculaInflacao(Grafo grafo, Filter filter)
         {
             int idCliente = filter->arraryC[i];
             int idServidor = filter->arraryS[j];
-            rtt = calculaRTT(grafo, filter, idCliente, idServidor);               // Equivalente a Equação RTT(a, b) = δ(a, b) + δ(b, a)
-            rttEstrela = calculaRTTEstrela(grafo, filter, idCliente, idServidor); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
-            resultado = rttEstrela / rtt;                                         // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
+            rtt = calculaRTT(idCliente, idServidor, distancias);                       // Equivalente a Equação RTT(a, b) = δ(a, b) + δ(b, a)
+            rttEstrela = calculaRTTEstrela(filter, idCliente, idServidor, distancias); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
+            resultado = rttEstrela / rtt;                                              // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
 
-            // testando
-            printf("RTT*(%d, %d) = %lf\n", idServidor, idCliente, rttEstrela);
-            printf("RTT(%d, %d) = %lf\n", idServidor, idCliente, rtt);
-            printf("Inflação(%d, %d) = %lf\n", idServidor, idCliente, resultado);
-            printf("\n");
-
-            InsereInflacao(inflacao, idCliente, idServidor, resultado);
+            InsereInflacao(inflacao, C * S, idCliente, idServidor, resultado);
         }
     }
     inflacao = ordenaResultado(inflacao, C, S); // Ordena o vetor de inflações
     return inflacao;
 }
 
-double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor)
+double calculaRTT(int idCliente, int idServidor, double **distancias)
 {
-    return (dijkstra(grafo, idCliente, idServidor) + dijkstra(grafo, idServidor, idCliente));
+    return distancias[idCliente][idServidor] + distancias[idServidor][idCliente];
 }
 
-double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor)
+double calculaRTTEstrela(Filter filter, int idCliente, int idServidor, double **distancias)
 {
-    double rtt = DBL_MAX;
+    double rtt = INFINITO; // Inicializa o RTT* com um valor grande
+
+    // Percorre os monitores para ver se há um caminho melhor
+
     for (int i = 0; i < filter->M; i++)
     {
         int idMonitor = filter->arraryM[i];
-        double rttAtual = dijkstra(grafo, idCliente, idMonitor) + dijkstra(grafo, idMonitor, idServidor);
-        if (rttAtual < rtt)
+
+        // Verifica se as distâncias são válidas
+        if (distancias[idServidor][idMonitor] < INFINITO && distancias[idMonitor][idCliente] < INFINITO)
         {
-            rtt = rttAtual;
+            // Calcula o RTT passando pelo monitor
+            double rttAtual = distancias[idServidor][idMonitor] + distancias[idMonitor][idCliente];
+    
+
+            // Se o RTT pelo monitor for menor, atualiza
+            if (rttAtual < rtt)
+            {
+                rtt = rttAtual;
+            }
         }
     }
-    return rtt;
-}
 
-void imprimeFilter(Filter filter)
-{
-    printf("S: ");
-    for (int i = 0; i < filter->S; i++)
-    {
-        printf("%d ", filter->arraryS[i]);
-    }
-    printf("\nC: ");
-    for (int i = 0; i < filter->C; i++)
-    {
-        printf("%d ", filter->arraryC[i]);
-    }
-    printf("\nM: ");
-    for (int i = 0; i < filter->M; i++)
-    {
-        printf("%d ", filter->arraryM[i]);
-    }
-    printf("\n");
+    return rtt; // Retorna o RTT* calculado
 }
 
 int *getArrayS(Filter filter)
@@ -218,19 +204,27 @@ int *getArrayM(Filter filter)
     return filter->arraryM;
 }
 
-void imprimeGrafo(Grafo grafo)
+double **IniciaMatriz(int V)
 {
-    for (int i = 0; i < grafo->V; i++)
+    double **matriz = (double **)malloc(V * sizeof(double *));
+    for (int i = 0; i < V; i++)
     {
-        Node *atual = grafo->listaDeAdjacencia[i];
-        printf("Vértice %d: ", i);
-        while (atual != NULL)
+        matriz[i] = (double *)malloc(V * sizeof(double));
+        for (int j = 0; j < V; j++)
         {
-            printf(" -> %d(%lf) ", atual->id, atual->peso);
-            atual = atual->prox;
+            matriz[i][j] = INFINITO;
         }
-        printf("\n");
     }
+    return matriz;
+}
+
+void DestroiMatriz(double **matriz, int V)
+{
+    for (int i = 0; i < V; i++)
+    {
+        free(matriz[i]);
+    }
+    free(matriz);
 }
 
 void destroiGrafo(Grafo grafo)
@@ -260,4 +254,56 @@ void destroiFilter(Filter filter)
 void destroiInflacao(RTT *inflacao)
 {
     free(inflacao);
+}
+
+void imprimeMatriz(double **distancias, int V)
+{
+    // Imprime os cabeçalhos das colunas (números dos nós)
+    printf("    "); // Espaço para a primeira coluna de rótulos de linha
+    for (int j = 0; j < V; j++)
+    {
+        printf("%7d  ", j);
+    }
+    printf("\n");
+
+    // Imprime a linha de separação
+    printf("    ");
+    for (int j = 0; j < V; j++)
+    {
+        printf("---------");
+    }
+    printf("\n");
+
+    // Imprime os valores da matriz
+    for (int i = 0; i < V; i++)
+    {
+        printf("%2d |", i); // Imprime o rótulo da linha (número do nó)
+        for (int j = 0; j < V; j++)
+        {
+            if (distancias[i][j] == INFINITO)
+            { // Verifica se é infinito (ou seja, não há caminho)
+                printf("%5s ", "INF");
+            }
+            else
+            {
+                printf("%5.6lf ", distancias[i][j]);
+            }
+        }
+        printf("\n");
+    }
+}
+
+void imprimeGrafo(Grafo grafo)
+{
+    for (int i = 0; i < grafo->V; i++)
+    {
+        Node *atual = grafo->listaDeAdjacencia[i];
+        printf("%d: ", i);
+        while (atual != NULL)
+        {
+            printf("%d(%.2lf) ", atual->id, atual->peso);
+            atual = atual->prox;
+        }
+        printf("\n");
+    }
 }

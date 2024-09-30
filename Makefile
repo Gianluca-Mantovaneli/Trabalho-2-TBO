@@ -5,7 +5,7 @@ TARGET = Bin/trab2
 CC = gcc
 
 # Opções de compilação
-CFLAGS = -Wall -Wpedantic
+CFLAGS =  
 
 # Diretórios
 SRCDIR = Sources

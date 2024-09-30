@@ -80,8 +80,17 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
         insereArestaDirecionada(grafo, idEmissor, idReceptor, peso);
     }
 
+    // Inicializando a matriz de distâncias
+    double **distancias = IniciaMatriz(V);
+
+    // Calculando as distâncias mínimas entre todos os pares de vértices
+    for (int i = 0; i < V; i++)
+    {
+        dijkstra(grafo, i, distancias);
+    }
+
     // Calculando a inflação
-    RTT *resultado = calculaInflacao(grafo, filter);
+    RTT *resultado = calculaInflacao(grafo, filter, distancias);
 
     // Escrevendo o resultado no arquivo de saída
     EscritaArquivo(saidaPath, resultado, filter->C, filter->S);
@@ -89,6 +98,7 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
     // Destruindo as estruturas alocadas
     destroiGrafo(grafo);
     destroiFilter(filter);
+    DestroiMatriz(distancias, V);
     fclose(file);
 }
 
