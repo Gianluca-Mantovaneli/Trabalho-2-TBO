@@ -74,4 +74,6 @@ void destroiFilter(Filter filter);
 
 void destroiInflacao(RTT *inflacao);
 
+void imprimeMatriz(double **distancias, int V);
+
 #endif // grafoListaDeAdjacencia_H

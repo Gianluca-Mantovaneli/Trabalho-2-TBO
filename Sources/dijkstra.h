@@ -8,6 +8,8 @@
 #include "priorityQueue.h"
 #include "grafoListaDeAdjacencia.h"
 
+#define INFINITO 1e9
+
 typedef struct grafo *Grafo;
 
 void dijkstra(Grafo grafo, int origem, double **distancias);

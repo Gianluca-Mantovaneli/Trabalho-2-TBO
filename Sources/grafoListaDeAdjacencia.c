@@ -169,23 +169,33 @@ double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor, dou
 
 double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias)
 {
-    double rtt = __DBL_MAX__;  // Inicializa com infinito (ou algum valor muito grande)
+    double rtt = INFINITO; // Inicializa o RTT* com um valor grande
 
-    // Percorre todos os monitores
+    // Se o RTT direto já é o menor possível, ele deve ser retornado sem considerar os monitores
+    if (distancias[idCliente][idServidor] < INFINITO)
+    {
+        rtt = distancias[idCliente][idServidor];
+    }
+
+    // Percorre os monitores para ver se há um caminho melhor
     for (int i = 0; i < filter->M; i++)
     {
         int idMonitor = filter->arraryM[i];
 
-        // Acessa diretamente as distâncias na matriz
-        double rttAtual = distancias[idCliente][idMonitor] + distancias[idMonitor][idServidor];
-        
-        // Atualiza o RTT mínimo
-        if (rttAtual < rtt)
+        // Verifica se existem caminhos válidos (sem valores infinitos)
+        if (distancias[idCliente][idMonitor] < INFINITO && distancias[idMonitor][idServidor] < INFINITO)
         {
-            rtt = rttAtual;
+            // Calcula o RTT passando pelo monitor
+            double rttAtual = distancias[idCliente][idMonitor] + distancias[idMonitor][idServidor];
+
+            // Se o RTT pelo monitor for menor, atualiza
+            if (rttAtual < rtt)
+            {
+                rtt = rttAtual;
+            }
         }
     }
-    
+
     return rtt;
 }
 
@@ -212,7 +222,7 @@ double **IniciaMatriz(int V)
         matriz[i] = (double *)malloc(V * sizeof(double));
         for (int j = 0; j < V; j++)
         {
-            matriz[i][j] = __DBL_MAX__;
+            matriz[i][j] = INFINITO;
         }
     }
     return matriz;
@@ -254,4 +264,41 @@ void destroiFilter(Filter filter)
 void destroiInflacao(RTT *inflacao)
 {
     free(inflacao);
+}
+
+void imprimeMatriz(double **distancias, int V)
+{
+    // Imprime os cabeçalhos das colunas (números dos nós)
+    printf("    "); // Espaço para a primeira coluna de rótulos de linha
+    for (int j = 0; j < V; j++)
+    {
+        printf("%5d ", j);
+    }
+    printf("\n");
+
+    // Imprime a linha de separação
+    printf("    ");
+    for (int j = 0; j < V; j++)
+    {
+        printf("------");
+    }
+    printf("\n");
+
+    // Imprime os valores da matriz
+    for (int i = 0; i < V; i++)
+    {
+        printf("%2d |", i); // Imprime o rótulo da linha (número do nó)
+        for (int j = 0; j < V; j++)
+        {
+            if (distancias[i][j] == INFINITO)
+            { // Verifica se é infinito (ou seja, não há caminho)
+                printf("%5s ", "INF");
+            }
+            else
+            {
+                printf("%.6lf ", distancias[i][j]); // Ajusta para 1 casa decimal
+            }
+        }
+        printf("\n");
+    }
 }

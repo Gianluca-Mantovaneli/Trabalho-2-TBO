@@ -13,7 +13,7 @@ void dijkstra(Grafo grafo, int origem, double **distancias)
     // Inicializando as distâncias e os nós visitados
     for (int i = 0; i < V; i++)
     {
-        dist[i] = __DBL_MAX__; // Inicia com infinito
+        dist[i] = INFINITO; // Inicia com infinito
         visitado[i] = false;   // Nenhum nó foi visitado ainda
     }
 
