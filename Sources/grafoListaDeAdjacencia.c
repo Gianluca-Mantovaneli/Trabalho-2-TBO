@@ -120,9 +120,9 @@ RTT *ordenaResultado(RTT *resultado, int C, int S)
     return resultado;
 }
 
-void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor)
+void InsereInflacao(RTT *inflacao, int tamanho, int idCliente, int idServidor, double valor)
 {
-    for (int i = 0; i < sizeof(inflacao); i++)
+    for (int i = 0; i < tamanho; i++)
     {
         if (inflacao[i].idCliente == idCliente && inflacao[i].idServidor == idServidor)
         {
@@ -155,7 +155,7 @@ RTT *calculaInflacao(Grafo grafo, Filter filter, double **distancias)
             printf("Inflação(%d, %d) = %lf\n", idServidor, idCliente, resultado);
             printf("\n");
 
-            InsereInflacao(inflacao, idCliente, idServidor, resultado);
+            InsereInflacao(inflacao, C * S, idCliente, idServidor, resultado);
         }
     }
     inflacao = ordenaResultado(inflacao, C, S); // Ordena o vetor de inflações
@@ -172,10 +172,10 @@ double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServid
     double rtt = INFINITO; // Inicializa o RTT* com um valor grande
 
     // Se o RTT direto já é o menor possível, ele deve ser retornado sem considerar os monitores
-    if (distancias[idCliente][idServidor] < INFINITO)
-    {
-        rtt = distancias[idCliente][idServidor];
-    }
+    // if (distancias[idCliente][idServidor] < INFINITO)
+    // {
+    //     rtt = distancias[idCliente][idServidor];
+    // }
 
     // Percorre os monitores para ver se há um caminho melhor
     for (int i = 0; i < filter->M; i++)
@@ -183,17 +183,17 @@ double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServid
         int idMonitor = filter->arraryM[i];
 
         // Verifica se existem caminhos válidos (sem valores infinitos)
-        if (distancias[idCliente][idMonitor] < INFINITO && distancias[idMonitor][idServidor] < INFINITO)
-        {
-            // Calcula o RTT passando pelo monitor
-            double rttAtual = distancias[idCliente][idMonitor] + distancias[idMonitor][idServidor];
+        // if (distancias[idCliente][idMonitor] < INFINITO && distancias[idMonitor][idServidor] < INFINITO)
+        // {
+        // Calcula o RTT passando pelo monitor
+        double rttAtual = distancias[idCliente][idMonitor] + distancias[idMonitor][idServidor];
 
-            // Se o RTT pelo monitor for menor, atualiza
-            if (rttAtual < rtt)
-            {
-                rtt = rttAtual;
-            }
+        // Se o RTT pelo monitor for menor, atualiza
+        if (rttAtual < rtt)
+        {
+            rtt = rttAtual;
         }
+        // }
     }
 
     return rtt;
@@ -296,7 +296,7 @@ void imprimeMatriz(double **distancias, int V)
             }
             else
             {
-                printf("%.6lf ", distancias[i][j]); // Ajusta para 1 casa decimal
+                printf("%5.1lf ", distancias[i][j]); // Ajusta para 1 casa decimal
             }
         }
         printf("\n");

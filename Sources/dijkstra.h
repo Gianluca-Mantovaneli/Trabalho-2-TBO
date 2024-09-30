@@ -8,7 +8,7 @@
 #include "priorityQueue.h"
 #include "grafoListaDeAdjacencia.h"
 
-#define INFINITO 1e9
+#define INFINITO __DBL_MAX__
 
 typedef struct grafo *Grafo;
 
