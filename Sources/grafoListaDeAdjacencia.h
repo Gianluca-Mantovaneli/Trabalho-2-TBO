@@ -58,15 +58,15 @@ RTT *ordenaResultado(RTT *resultado, int C, int S);
 
 void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor);
 
-RTT *calculaInflacao(Grafo grafo, Filter filter);
+RTT *calculaInflacao(Grafo grafo, Filter filter, double **distancias);
 
-double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor); // Função que calcula o valor do RTT entre um cliente e um servidor
+double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias); // Função que calcula o valor do RTT entre um cliente e um servidor
 
-double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor); // Função que calcula o valor do RTT* entre um cliente e um servidor
+double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias); // Função que calcula o valor do RTT* entre um cliente e um servidor
 
-void imprimeFilter(Filter filter);
+double **IniciaMatriz(int V);
 
-void imprimeGrafo(Grafo grafo);
+void DestroiMatriz(double **matriz, int V);
 
 void destroiGrafo(Grafo grafo);
 

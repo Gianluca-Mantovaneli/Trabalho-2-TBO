@@ -132,9 +132,8 @@ void InsereInflacao(RTT *inflacao, int idCliente, int idServidor, double valor)
     }
 }
 
-RTT *calculaInflacao(Grafo grafo, Filter filter)
+RTT *calculaInflacao(Grafo grafo, Filter filter, double **distancias)
 {
-
     int C = filter->C;
     int S = filter->S;
     double rtt, rttEstrela, resultado = 0.0; // Variáveis para armazenar os valores de RTT, RTT* e inflação
@@ -146,9 +145,9 @@ RTT *calculaInflacao(Grafo grafo, Filter filter)
         {
             int idCliente = filter->arraryC[i];
             int idServidor = filter->arraryS[j];
-            rtt = calculaRTT(grafo, filter, idCliente, idServidor);               // Equivalente a Equação RTT(a, b) = δ(a, b) + δ(b, a)
-            rttEstrela = calculaRTTEstrela(grafo, filter, idCliente, idServidor); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
-            resultado = rttEstrela / rtt;                                         // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
+            rtt = calculaRTT(grafo, filter, idCliente, idServidor, distancias);               // Equivalente a Equação RTT(a, b) = δ(a, b) + δ(b, a)
+            rttEstrela = calculaRTTEstrela(grafo, filter, idCliente, idServidor, distancias); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
+            resultado = rttEstrela / rtt;                                                     // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
 
             // testando
             printf("RTT*(%d, %d) = %lf\n", idServidor, idCliente, rttEstrela);
@@ -163,30 +162,32 @@ RTT *calculaInflacao(Grafo grafo, Filter filter)
     return inflacao;
 }
 
-double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias) {
-    if (distancias[idCliente][idServidor] == INF) {
-        // Calcula e armazena o RTT nos dois sentidos
-        distancias[idCliente][idServidor] = dijkstra(grafo, idCliente, idServidor);
-        distancias[idServidor][idCliente] = dijkstra(grafo, idServidor, idCliente);
-    }
+double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias)
+{
     return distancias[idCliente][idServidor] + distancias[idServidor][idCliente];
 }
 
-double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias) {
-    double rtt = INF;
-    for (int i = 0; i < filter->M; i++) {
+double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias)
+{
+    double rtt = __DBL_MAX__;  // Inicializa com infinito (ou algum valor muito grande)
+
+    // Percorre todos os monitores
+    for (int i = 0; i < filter->M; i++)
+    {
         int idMonitor = filter->arraryM[i];
-        if (distancias[idCliente][idMonitor] == INF) {
-            // Calcula e armazena o RTT parcial se necessário
-            distancias[idCliente][idMonitor] = dijkstra(grafo, idCliente, idMonitor);
-            distancias[idMonitor][idServidor] = dijkstra(grafo, idMonitor, idServidor);
-        }
+
+        // Acessa diretamente as distâncias na matriz
         double rttAtual = distancias[idCliente][idMonitor] + distancias[idMonitor][idServidor];
-        if (rttAtual < rtt) {
+        
+        // Atualiza o RTT mínimo
+        if (rttAtual < rtt)
+        {
             rtt = rttAtual;
         }
     }
+    
     return rtt;
+}
 
 int *getArrayS(Filter filter)
 {
@@ -211,7 +212,7 @@ double **IniciaMatriz(int V)
         matriz[i] = (double *)malloc(V * sizeof(double));
         for (int j = 0; j < V; j++)
         {
-            matriz[i][j] = DBL_MAX;
+            matriz[i][j] = __DBL_MAX__;
         }
     }
     return matriz;

@@ -10,6 +10,6 @@
 
 typedef struct grafo *Grafo;
 
-double dijkstra(Grafo grafo, int origem, int destino); // Função que calcula o valor do menor caminho entre dois vértices de um grafo
+void dijkstra(Grafo grafo, int origem, double **distancias);
 
 #endif // dijkstra_H
