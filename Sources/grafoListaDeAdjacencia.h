@@ -60,9 +60,9 @@ void InsereInflacao(RTT *inflacao, int tamanho, int idCliente, int idServidor, d
 
 RTT *calculaInflacao(Grafo grafo, Filter filter, double **distancias);
 
-double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias); // Função que calcula o valor do RTT entre um cliente e um servidor
+double calculaRTT(int idCliente, int idServidor, double **distancias);
 
-double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias); // Função que calcula o valor do RTT* entre um cliente e um servidor
+double calculaRTTEstrela(Filter filter, int idCliente, int idServidor, double **distancias); // Função que calcula o valor do RTT* entre um cliente e um servidor
 
 double **IniciaMatriz(int V);
 
@@ -75,5 +75,7 @@ void destroiFilter(Filter filter);
 void destroiInflacao(RTT *inflacao);
 
 void imprimeMatriz(double **distancias, int V);
+
+void imprimeGrafo(Grafo grafo);
 
 #endif // grafoListaDeAdjacencia_H

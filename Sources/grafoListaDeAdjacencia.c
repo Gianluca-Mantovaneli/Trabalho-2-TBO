@@ -145,9 +145,9 @@ RTT *calculaInflacao(Grafo grafo, Filter filter, double **distancias)
         {
             int idCliente = filter->arraryC[i];
             int idServidor = filter->arraryS[j];
-            rtt = calculaRTT(grafo, filter, idCliente, idServidor, distancias);               // Equivalente a Equação RTT(a, b) = δ(a, b) + δ(b, a)
-            rttEstrela = calculaRTTEstrela(grafo, filter, idCliente, idServidor, distancias); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
-            resultado = rttEstrela / rtt;                                                     // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
+            rtt = calculaRTT(idCliente, idServidor, distancias);                       // Equivalente a Equação RTT(a, b) = δ(a, b) + δ(b, a)
+            rttEstrela = calculaRTTEstrela(filter, idCliente, idServidor, distancias); // Equivalente a Equação RTT*(a,b) = min (RTT(a, m) + RTT(m, b))
+            resultado = rttEstrela / rtt;                                              // Equivalente a Equação inflação = RTT*(a, b) / RTT(a, b)
 
             // testando
             printf("RTT*(%d, %d) = %lf\n", idServidor, idCliente, rttEstrela);
@@ -162,41 +162,38 @@ RTT *calculaInflacao(Grafo grafo, Filter filter, double **distancias)
     return inflacao;
 }
 
-double calculaRTT(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias)
+double calculaRTT(int idCliente, int idServidor, double **distancias)
 {
     return distancias[idCliente][idServidor] + distancias[idServidor][idCliente];
 }
 
-double calculaRTTEstrela(Grafo grafo, Filter filter, int idCliente, int idServidor, double **distancias)
+double calculaRTTEstrela(Filter filter, int idCliente, int idServidor, double **distancias)
 {
     double rtt = INFINITO; // Inicializa o RTT* com um valor grande
 
-    // Se o RTT direto já é o menor possível, ele deve ser retornado sem considerar os monitores
-    // if (distancias[idCliente][idServidor] < INFINITO)
-    // {
-    //     rtt = distancias[idCliente][idServidor];
-    // }
-
     // Percorre os monitores para ver se há um caminho melhor
+    printf("Calculando RTT* entre %d e %d\n", idServidor, idCliente);
     for (int i = 0; i < filter->M; i++)
     {
         int idMonitor = filter->arraryM[i];
 
-        // Verifica se existem caminhos válidos (sem valores infinitos)
-        // if (distancias[idCliente][idMonitor] < INFINITO && distancias[idMonitor][idServidor] < INFINITO)
-        // {
-        // Calcula o RTT passando pelo monitor
-        double rttAtual = distancias[idCliente][idMonitor] + distancias[idMonitor][idServidor];
-
-        // Se o RTT pelo monitor for menor, atualiza
-        if (rttAtual < rtt)
+        // Verifica se as distâncias são válidas
+        if (distancias[idServidor][idMonitor] < INFINITO && distancias[idMonitor][idCliente] < INFINITO)
         {
-            rtt = rttAtual;
-        }
-        // }
-    }
+            // Calcula o RTT passando pelo monitor
+            double rttAtual = distancias[idServidor][idMonitor] + distancias[idMonitor][idCliente];
+            printf("RTT*(%d, %d) + (%d, %d) = %lf\n", idServidor, idMonitor, idMonitor, idCliente, rttAtual);
 
-    return rtt;
+            // Se o RTT pelo monitor for menor, atualiza
+            if (rttAtual < rtt)
+            {
+                rtt = rttAtual;
+            }
+        }
+    }
+    printf("\n");
+
+    return rtt; // Retorna o RTT* calculado
 }
 
 int *getArrayS(Filter filter)
@@ -272,7 +269,7 @@ void imprimeMatriz(double **distancias, int V)
     printf("    "); // Espaço para a primeira coluna de rótulos de linha
     for (int j = 0; j < V; j++)
     {
-        printf("%5d ", j);
+        printf("%7d  ", j);
     }
     printf("\n");
 
@@ -280,7 +277,7 @@ void imprimeMatriz(double **distancias, int V)
     printf("    ");
     for (int j = 0; j < V; j++)
     {
-        printf("------");
+        printf("---------");
     }
     printf("\n");
 
@@ -296,8 +293,23 @@ void imprimeMatriz(double **distancias, int V)
             }
             else
             {
-                printf("%5.1lf ", distancias[i][j]); // Ajusta para 1 casa decimal
+                printf("%5.6lf ", distancias[i][j]);
             }
+        }
+        printf("\n");
+    }
+}
+
+void imprimeGrafo(Grafo grafo)
+{
+    for (int i = 0; i < grafo->V; i++)
+    {
+        Node *atual = grafo->listaDeAdjacencia[i];
+        printf("%d: ", i);
+        while (atual != NULL)
+        {
+            printf("%d(%.2lf) ", atual->id, atual->peso);
+            atual = atual->prox;
         }
         printf("\n");
     }

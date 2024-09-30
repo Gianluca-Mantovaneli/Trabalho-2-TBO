@@ -89,7 +89,9 @@ void LeituraArquivo(const char *entradaPath, const char *saidaPath)
         dijkstra(grafo, i, distancias);
     }
 
+    printf("Matriz de distâncias:\n");
     imprimeMatriz(distancias, V);
+    printf("\n");
 
     // Calculando a inflação
     RTT *resultado = calculaInflacao(grafo, filter, distancias);
